@@ -1,8 +1,10 @@
 package backend_service.controller;
 
+import backend_service.common.Gender;
 import backend_service.controller.request.UserCreationRequest;
 import backend_service.controller.request.UserPasswordRequest;
 import backend_service.controller.request.UserUpdateRequest;
+import backend_service.controller.response.UserPageResponse;
 import backend_service.controller.response.UserResponse;
 import backend_service.repository.AddressRepository;
 import backend_service.service.UserService;
@@ -32,28 +34,16 @@ public class UserController {
   @Operation(summary = "Get user list", description = "API retrieve user from db")
   @GetMapping("/list")
   public Map<String, Object> getList(@RequestParam(required = false) String keyword,
+                                     @RequestParam(required = false) String sort,
                                      @RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "20") int size) {
 
-    UserResponse userResponse1 = new UserResponse();
-    userResponse1.setId(1L);
-    userResponse1.setFirstName("Tay");
-    userResponse1.setLastName("Java");
-    userResponse1.setGender("");
-    userResponse1.setBirthday(new Date());
-    userResponse1.setUsername("admin");
-    userResponse1.setEmail("admin@gmail.com");
-    userResponse1.setPhone("0975118228");
-
-
-    UserResponse userResponse2 = new UserResponse();
-
-    List<UserResponse> userList = List.of(userResponse1, userResponse2);
+    log.info("Get user list");
 
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("status", HttpStatus.OK.value());
     result.put("message", "user list");
-    result.put("data", userList);
+    result.put("data", userService.findAll(keyword, sort, page, size));
 
     return result;
   }
@@ -61,16 +51,9 @@ public class UserController {
   @Operation(summary = "Get user detail", description = "API retrieve user detail by ID")
   @GetMapping("/{userId}")
   public Map<String, Object> getUserDetail(@PathVariable Long userId) {
+    log.info("Get user detail by ID: {}", userId);
 
-    UserResponse userDetail = new UserResponse();
-    userDetail.setId(userId);
-    userDetail.setFirstName("Tay");
-    userDetail.setLastName("Java");
-    userDetail.setGender("");
-    userDetail.setBirthday(new Date());
-    userDetail.setUsername("admin");
-    userDetail.setEmail("admin@gmail.com");
-    userDetail.setPhone("0975118228");
+    UserResponse userDetail = userService.findById(userId);
 
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("status", HttpStatus.OK.value());

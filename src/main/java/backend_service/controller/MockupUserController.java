@@ -1,5 +1,6 @@
 package backend_service.controller;
 
+import backend_service.common.Gender;
 import backend_service.controller.request.UserCreationRequest;
 import backend_service.controller.request.UserPasswordRequest;
 import backend_service.controller.request.UserUpdateRequest;
@@ -30,7 +31,7 @@ public class MockupUserController {
     userResponse1.setId(1L);
     userResponse1.setFirstName("Tay");
     userResponse1.setLastName("Java");
-    userResponse1.setGender("");
+    userResponse1.setGender(Gender.MALE);
     userResponse1.setBirthday(new Date());
     userResponse1.setUsername("admin");
     userResponse1.setEmail("admin@gmail.com");
@@ -57,7 +58,7 @@ public class MockupUserController {
     userDetail.setId(userId);
     userDetail.setFirstName("Tay");
     userDetail.setLastName("Java");
-    userDetail.setGender("");
+    userDetail.setGender(Gender.MALE);
     userDetail.setBirthday(new Date());
     userDetail.setUsername("admin");
     userDetail.setEmail("admin@gmail.com");

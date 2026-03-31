@@ -1,25 +1,24 @@
 package backend_service.controller;
 
-import backend_service.common.Gender;
+
 import backend_service.controller.request.UserCreationRequest;
 import backend_service.controller.request.UserPasswordRequest;
 import backend_service.controller.request.UserUpdateRequest;
-import backend_service.controller.response.UserPageResponse;
 import backend_service.controller.response.UserResponse;
-import backend_service.repository.AddressRepository;
 import backend_service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,6 +26,7 @@ import java.util.Map;
 @Tag(name = "User Controller")
 @RequiredArgsConstructor
 @Slf4j(topic = "USER-CONTROLLER")
+@Validated
 public class UserController {
 
   private final UserService userService;
@@ -50,7 +50,7 @@ public class UserController {
 
   @Operation(summary = "Get user detail", description = "API retrieve user detail by ID")
   @GetMapping("/{userId}")
-  public Map<String, Object> getUserDetail(@PathVariable Long userId) {
+  public Map<String, Object> getUserDetail(@PathVariable @Min(value = 1, message = "userId must be equals or greater than 1") Long userId) {
     log.info("Get user detail by ID: {}", userId);
 
     UserResponse userDetail = userService.findById(userId);
@@ -65,7 +65,7 @@ public class UserController {
 
   @Operation(summary = "Create User", description = "API add new user to db")
   @PostMapping("/add")
-  public ResponseEntity<Object> createUser(@RequestBody UserCreationRequest request) {
+  public ResponseEntity<Object> createUser(@RequestBody @Valid UserCreationRequest request) {
 
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("status", HttpStatus.CREATED.value());
@@ -77,7 +77,7 @@ public class UserController {
 
   @Operation(summary = "Update User", description = "API update user to db")
   @PutMapping("/upd")
-  public Map<String, Object> updateUser(@RequestBody UserUpdateRequest request) {
+  public Map<String, Object> updateUser(@RequestBody @Valid UserUpdateRequest request) {
     log.info("Update user: {}", request);
 
     userService.update(request);

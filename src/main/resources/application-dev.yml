@@ -13,8 +13,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-  hibernate:
-    ddl-auto: none
+    hibernate:
+      ddl-auto: none
+  sendgrid:
+    api-key: ôsso
+    from-email: quan93909@gmail.com
 
 springdoc:
   api-docs:

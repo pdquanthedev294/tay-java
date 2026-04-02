@@ -18,6 +18,8 @@ spring:
   sendgrid:
     api-key: ôsso
     from-email: quan93909@gmail.com
+    templateId: d-8d276ce816254b399ebcc962d2f2199a
+    verificationLink: http://localhost:8080/user/confirm-email
 
 springdoc:
   api-docs:

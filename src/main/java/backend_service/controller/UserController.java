@@ -8,6 +8,7 @@ import backend_service.controller.response.UserResponse;
 import backend_service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -103,6 +105,18 @@ public class UserController {
     result.put("data", "");
 
     return result;
+  }
+
+  @GetMapping("/confirm-email")
+  public void confirmEmail(@RequestParam String secretCode, HttpServletResponse response) throws IOException, IOException {
+    log.info("Confirm email: {}", secretCode);
+    try {
+      // TODO checkcek or compare secretCode from database
+    } catch (Exception e) {
+      log.error("Confirm email was failure!, errorMessage={}", e.getMessage());
+    } finally {
+      response.sendRedirect("https://tayjava.vn/wp-admin");
+    }
   }
 
   @Operation(summary = "Delete user", description = "API activate user from database")

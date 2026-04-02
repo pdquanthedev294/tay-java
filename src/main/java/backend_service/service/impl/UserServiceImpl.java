@@ -13,6 +13,7 @@ import backend_service.model.AddressEntity;
 import backend_service.model.UserEntity;
 import backend_service.repository.AddressRepository;
 import backend_service.repository.UserRepository;
+import backend_service.service.EmailService;
 import backend_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final AddressRepository addressRepository;
   private final PasswordEncoder passwordEncoder;
+  private final EmailService emailService;
 
   @Override
   public UserPageResponse findAll(String keyword, String sort, int page, int size) {
@@ -155,6 +157,9 @@ public class UserServiceImpl implements UserService {
       addressRepository.saveAll(addresses);
       log.info("Saved addresses: {}", addresses);
     }
+
+    // send email
+    emailService.emailVerification(req.getEmail(), req.getUsername());
 
     return user.getId();
   }

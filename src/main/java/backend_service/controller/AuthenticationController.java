@@ -2,6 +2,7 @@ package backend_service.controller;
 
 import backend_service.controller.request.SigInRequest;
 import backend_service.controller.response.TokenResponse;
+import backend_service.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
+  private final AuthenticationService authenticationService;
+
   @Operation(summary = "Access token", description = "Get access token and refresh token by username and password")
   @PostMapping("/access-token")
   public TokenResponse getAccessToken(@RequestBody SigInRequest request) {
     log.info("Access token request");
-    return TokenResponse.builder().accessToken("DUMMY-ACCESS-TOKEN").refreshToken("DUMMY-REFRESH-TOKEN").build();
+//    return TokenResponse.builder().accessToken("DUMMY-ACCESS-TOKEN").refreshToken("DUMMY-REFRESH-TOKEN").build();
+    return authenticationService.getAccessToken(request);
   }
 
   @Operation(summary = "Refresh token", description = "Get new access token by refresh token")

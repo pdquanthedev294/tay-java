@@ -8,17 +8,16 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.util.Date;
 
@@ -179,6 +178,42 @@ public class GlobalException {
     errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
     errorResponse.setStatus(NOT_FOUND.value());
     errorResponse.setError(NOT_FOUND.getReasonPhrase());
+    errorResponse.setMessage(e.getMessage());
+
+    return errorResponse;
+  }
+
+  /*
+   * Handle exception when the request not found data
+   * */
+  @ExceptionHandler(AccessDeniedException.class)
+  @ResponseStatus(FORBIDDEN)
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "403", description = "Forbidden",
+      content = {@Content(mediaType = APPLICATION_JSON_VALUE,
+        examples = @ExampleObject(
+          name = "403 Response",
+          summary = "Handle exception when Forbidden",
+          value = """
+                {
+                    "timestamp": "2023-10-19T06:07:35.321+00:00",
+                    "status": 403,
+                    "path": "/api/v1/...",
+                    "error": "Forbidden",
+                    "message": "{data}..."
+                }
+                """
+        )
+      )}
+    )
+  })
+  public ErrorResponse handleAccessDeniedException(ResourceNotFoundException e, WebRequest request) {
+
+    ErrorResponse errorResponse = new ErrorResponse();
+    errorResponse.setTimestamp(new Date());
+    errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+    errorResponse.setStatus(FORBIDDEN.value());
+    errorResponse.setError(FORBIDDEN.getReasonPhrase());
     errorResponse.setMessage(e.getMessage());
 
     return errorResponse;

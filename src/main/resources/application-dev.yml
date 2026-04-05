@@ -14,7 +14,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   sendgrid:
     api-key: ôsso
     from-email: quan93909@gmail.com

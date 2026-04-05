@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,8 @@ public class UserController {
 
   @Operation(summary = "Get user list", description = "API retrieve user from db")
   @GetMapping("/list")
+//  @PreAuthorize("hasAnyAuthority('manager', 'admin')")
+  @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
   public Map<String, Object> getList(@RequestParam(required = false) String keyword,
                                      @RequestParam(required = false) String sort,
                                      @RequestParam(defaultValue = "0") int page,
@@ -52,6 +55,7 @@ public class UserController {
 
   @Operation(summary = "Get user detail", description = "API retrieve user detail by ID")
   @GetMapping("/{userId}")
+  @PreAuthorize("hasAuthority('user')")
   public Map<String, Object> getUserDetail(@PathVariable @Min(value = 1, message = "userId must be equals or greater than 1") Long userId) {
     log.info("Get user detail by ID: {}", userId);
 
@@ -121,6 +125,7 @@ public class UserController {
 
   @Operation(summary = "Delete user", description = "API activate user from database")
   @DeleteMapping("/del/{userId}")
+  @PreAuthorize("hasAuthority('admin')")
   public Map<String, Object> deleteUser(@PathVariable Long userId) {
     log.info("Deleting user: {}", userId);
 

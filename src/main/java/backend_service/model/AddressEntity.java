@@ -7,18 +7,14 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "tbl_address")
-public class AddressEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-
+public class AddressEntity extends AbstractEntity<Integer> implements Serializable {
   @Column(name = "apartment_number")
   private String apartmentNumber;
 
@@ -45,12 +41,4 @@ public class AddressEntity {
 
   @Column(name = "user_id")
   private Long userId;
-
-  @Column(name = "created_at", length = 255)
-  @CreationTimestamp
-  private Date createdAt;
-
-  @Column(name = "updated_at", length = 255)
-  @UpdateTimestamp
-  private Date updatedAt;
 }

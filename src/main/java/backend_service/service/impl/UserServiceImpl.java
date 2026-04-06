@@ -132,14 +132,14 @@ public class UserServiceImpl implements UserService {
     user.setType(req.getType());
     user.setStatus(UserStatus.NONE);
 
-    userRepository.save(user);
+    UserEntity result = userRepository.save(user);
     log.info("Save user: {}", user);
 
-    if (user.getId() != null) {
+    if (result.getId() != null) {
 //      System.out.println(10/0);
 //       Khi ma thuc hien sava repository thi log in
 //       ra cau lenh Hibernate roi de sava vao database nhung ma trong database chua luu
-      log.info("user id: {}", user.getId());
+      log.info("user id: {}", result.getId());
       List<AddressEntity> addresses = new ArrayList<>();
       req.getAddresses().forEach((AddressRequest address) -> {
         AddressEntity addressEntity = new AddressEntity();
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
         addressEntity.setCity(address.getCity());
         addressEntity.setCountry(address.getCountry());
         addressEntity.setAddressType(address.getAddressType());
-        addressEntity.setUserId(user.getId());
+        addressEntity.setUserId(result.getId());
         addresses.add(addressEntity);
       });
       addressRepository.saveAll(addresses);
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
     // send email
     emailService.emailVerification(req.getEmail(), req.getUsername());
 
-    return user.getId();
+    return result.getId();
   }
 
   @Override

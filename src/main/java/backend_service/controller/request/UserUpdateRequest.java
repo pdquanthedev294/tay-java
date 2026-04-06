@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Getter
+@Setter
 @ToString
 public class UserUpdateRequest  implements Serializable {
   @NotNull(message = "Id must be not null")

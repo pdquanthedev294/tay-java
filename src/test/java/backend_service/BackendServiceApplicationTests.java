@@ -1,13 +1,31 @@
 package backend_service;
 
+import backend_service.controller.AuthenticationController;
+import backend_service.controller.EmailController;
+import backend_service.controller.UserController;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class BackendServiceApplicationTests {
 
-	@Test
+  @InjectMocks
+  private AuthenticationController authenticationController;
+
+  @InjectMocks
+  private UserController userController;
+
+  @InjectMocks
+  private EmailController emailController;
+
+  @Test
 	void contextLoads() {
+    Assertions.assertNotNull(authenticationController);
+    Assertions.assertNotNull(userController);
+    Assertions.assertNotNull(emailController);
 	}
 
 }
